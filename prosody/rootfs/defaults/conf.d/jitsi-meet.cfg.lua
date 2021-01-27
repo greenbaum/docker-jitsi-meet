@@ -76,7 +76,7 @@ VirtualHost "{{ .Env.XMPP_DOMAIN }}"
         "ping";
         "speakerstats";
         "conference_duration";
-        {{ if and $ENABLE_LOBBY }}
+        {{ if $ENABLE_LOBBY }}
         "muc_lobby_rooms";
         {{ end }}
         {{ if .Env.XMPP_MODULES }}
@@ -87,7 +87,7 @@ VirtualHost "{{ .Env.XMPP_DOMAIN }}"
         {{end}}
     }
 
-    {{ if and $ENABLE_LOBBY }}
+    {{ if $ENABLE_LOBBY }}
     main_muc = "{{ .Env.XMPP_MUC_DOMAIN }}"
     lobby_muc = "lobby.{{ .Env.XMPP_DOMAIN }}"
     {{ if .Env.XMPP_RECORDER_DOMAIN }}
@@ -114,6 +114,9 @@ VirtualHost "{{ .Env.XMPP_GUEST_DOMAIN }}"
 
     c2s_require_encryption = false
 
+    {{ if and $ENABLE_LOBBY .Env.XMPP_RECORDER_DOMAIN }}
+    muc_lobby_whitelist = { "{{ .Env.XMPP_RECORDER_DOMAIN }}" }
+    {{ end }}
 
 {{ end }}
 
